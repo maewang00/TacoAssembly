@@ -109,10 +109,12 @@ function getJSONfile(url, callback, category) {
 		var data = JSON.parse(this.response);
 		if (request.status >= 200 && request.status < 400) {
 			data.forEach(function (item, index) {
-				console.log(item, index);
+				//console.log(item, index);
 				//loop through the array of dictionaries
 				var lst = document.getElementById(category);
 				var container = document.createElement("li");
+				container.setAttribute("class", "item"); //item.slug + index
+				container.setAttribute("id", item.name);
 				var itemName = document.createTextNode(item.name);
 				var br = document.createElement("br");
  				
@@ -167,6 +169,16 @@ $(document).ready(function() {
 
  	console.log("Elementary, my dear.");
 
+ 	//Clicking on an ingredient!
+ 	$(document).on("click", '.item', function() {
+    	console.log("Clicked an item!");
+    	if ($(this).css('background-color') == 'rgb(255, 155, 0)') {
+            $(this).css('background-color', 'white');
+        } else {
+    		$(this).css("background-color", 'rgb(255, 155, 0)');
+    	}
+	});
+
  	// Random Mode ON
  	$("#button1").click(function(){
  		$("#activity-container-left").hide();
@@ -179,7 +191,8 @@ $(document).ready(function() {
  	// Make Your Own Taco ON
  	$("#button2").click(function(){
  		$("#activity-container-left").hide();
- 		$("#activity-container-left").css("width", "50%");
+ 		$("#activity-container-left").css("width", "65%");
+ 		$("#activity-container-right").css("width", "35%");
  		$("#activity-container-left").fadeIn(1000);
  		$("#activity-container-right").fadeIn(1000);
  		randomMode = false;
