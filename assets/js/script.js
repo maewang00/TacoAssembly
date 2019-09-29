@@ -1,5 +1,5 @@
-/// Variables and data///
-//Global list of selected items: updates everytime a taco is submitted 
+/// Variables and data ///
+// Global list of selected items: updates everytime a taco is submitted 
 var currItemsList = {
 	shells: [],
 	baseLayers: [],
@@ -8,15 +8,31 @@ var currItemsList = {
 	seasonings: []
 };
 
-//Variable that update modes in JQuery.
+var allItemsList = {
+	shells: [],
+	baseLayers: [],
+	mixins: [],
+	condiments: [],
+	seasonings: []
+};
+
+var generatedList = {
+		shells: [],
+		baseLayers: [],
+		mixins: [],
+		condiments: [],
+		seasonings: []
+};
+
+// Variable that update modes in JQuery.
 var randomMode = true;
-//Variable to make ids for made tacos.
+// Variable to make ids for made tacos.
 var idCount = 0;
 
-//categories for ingredients
+// Categories for ingredients.
 var categories = ["shells", "baseLayers", "mixins", "condiments", "seasonings"];
 
-//When submit button is clicked, add taco!
+// When submit button is clicked, add taco!
 window.onload = function() {
 	document.getElementById("submit-button").onclick = function() {
 		if (!randomMode) {
@@ -26,6 +42,7 @@ window.onload = function() {
 			}
 		} else {
 			addRandomTaco();
+			clearItemsList();
 		}
 	}
 };
@@ -40,6 +57,14 @@ function clearItemsList() {
 		seasonings: []
 	}
 
+	generatedList = {
+		shells: [],
+		baseLayers: [],
+		mixins: [],
+		condiments: [],
+		seasonings: []
+	}
+
 	var elements = document.getElementsByClassName("item");
 	for(var i = 0; i < elements.length; i++){
 		elements[i].style.backgroundColor = "#A4FCA0";
@@ -47,15 +72,12 @@ function clearItemsList() {
 };
 
 function addRandomTaco() {
-	var randList = {
-		shells: [],
-		baseLayers: [],
-		mixins: [],
-		condiments: [],
-		seasonings: []
-	};
-	var newTaco = makeTaco(randList, "random-tacos");
-	tacoIdDict[newTaco[id]] = newTaco;
+	for (key in allItemsList) {
+		var arr = allItemsList[key];
+		generatedList[key].push(arr[Math.floor(Math.random()*arr.length)]);
+	}
+
+	var newTaco = makeTaco(generatedList, "random-tacos");
 };
 
 //Assuming that the criteria of taco is fulfilled. Add to tacoIdDict
@@ -63,11 +85,11 @@ function addUserTaco() {
 	makeTaco(currItemsList, "user-made-tacos");
 };
 
-//generic taco maker
+// Generic taco object maker.
 function makeTaco(itemsList, category) {
 	idCounter = idCount;
 	const taco = {
-		tid: idCount, //.toString()
+		tid: idCount,
 		shells: stringify(itemsList["shells"]),
 		baseLayers: stringify(itemsList["baseLayers"]),
 		mixins: stringify(itemsList["mixins"]),
@@ -95,22 +117,30 @@ function getTacoSentence(taco) {
 };
 
 function stringify(arrOfIng) {
-	if (arraysEqual(arrOfIng, currItemsList["seasonings"])) {
-		console.log("Ye im the same");
+	var arrayLength = arrOfIng.length;
+
+	if (arraysEqual(arrOfIng, currItemsList["seasonings"]) || arraysEqual(arrOfIng, generatedList["seasonings"])) {
 		var builder = "";
-		var arrayLength = arrOfIng.length;
 		for (var i = 0; i < arrayLength - 1; i++) {
-			builder += currItemsList["seasonings"][i] + ", ";
+			builder += arrOfIng["seasonings"][i] + ", ";
 		}
-		builder += "and " + currItemsList["seasonings"][arrayLength - 1] + ".";
+		builder += "and " + arrOfIng[arrayLength - 1] + ".";
 	} else {
 		var builder = "";
-		arrOfIng.forEach(function (item) {
-			builder += item + ", ";
-		});
+		for (var i = 0; i < arrayLength; i++) {
+			builder += arrOfIng[i] + ", "
+		}
 	}	
 	return builder;
 };
+
+function stringifyLast(arrayLength, arrOfIng, lst) {
+	var builder = "";
+		for (var i = 0; i < arrayLength - 1; i++) {
+			builder += arrOfIng["seasonings"][i] + ", ";
+		}
+		builder += "and " + arrOfIng["seasonings"][arrayLength - 1] + ".";
+}
 
 function checkValidTaco() {
 	for (key in currItemsList) {
@@ -126,8 +156,8 @@ function deleteTaco(tid) {
 	document.getElementById(tid).remove();
 }
 
+// some unique taco key
 function getTacoID(taco){
-  // some unique taco key
   return taco.tid;
 };
 
@@ -147,19 +177,14 @@ function addIngredient(sect, ingName) {
 };
 
 function arraysEqual(a, b) {
-  // if (a === b) return true;
-  // if (a == null || b == null) return false;
-  // if (a.length != b.length) return false;
-  console.log(a.length);
-  console.log(b.length);
-  console.log(b.length == a.length);
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
   for (var i = 0; i < a.length; ++i) {
     if (a[i] !== b[i]) return false;
   }
   return true;
 }
-
-
 
 categories.forEach(function (item, index) {
   getJSONfile('https://ct-tacoapi.azurewebsites.net/' + item, function(err, data) {
@@ -171,7 +196,7 @@ categories.forEach(function (item, index) {
 }, item);
 });
 
-//function to manage JSON url requests
+// Function to manage JSON url requests
 function getJSONfile(url, callback, category) {
 	var request = new XMLHttpRequest()
 	request.open('GET', url, true);
@@ -179,9 +204,8 @@ function getJSONfile(url, callback, category) {
 		// Begin accessing JSON data here
 		var data = JSON.parse(this.response);
 		if (request.status >= 200 && request.status < 400) {
+			// Loop through the array of dictionaries
 			data.forEach(function (item, index) {
-				//console.log(item, index);
-				//loop through the array of dictionaries
 				var lst = document.getElementById(category);
 				var container = document.createElement("li");
 				container.setAttribute("class", "item " + category); //item.slug + index
@@ -192,6 +216,8 @@ function getJSONfile(url, callback, category) {
     			container.appendChild(itemName);
     			lst.appendChild(container);
 				container.style.cssText = 'font-size: 70%; font-weight: bold; padding: 5px;';
+
+				allItemsList[category].push(item.name);
 	 		});
 		} else {
 			console.log('error');
@@ -210,25 +236,23 @@ $(document).ready(function() {
 
  	console.log("Elementary, my dear.");
 
- 	//Clicking on an ingredient!
+ 	// Clicking on an ingredient!
  	$(document).on("click", '.item', function() {
-    	console.log("Clicked an item!");
+    	//console.log("Clicked an item!");
     	if ($(this).css('background-color') == 'rgb(255, 155, 0)') {
             $(this).css('background-color', '#A4FCA0');
-            console.log("Adding " + $(this).attr('id'));
             removeIngredient($(this).attr('class'), $(this).attr('id'));
         } else {
     		$(this).css("background-color", 'rgb(255, 155, 0)');
     		addIngredient($(this).attr('class'), $(this).attr('id'));
     	}
-    	console.log(currItemsList);
 	});
 
-	//Clicking on generated taco!
+	// Clicking on generated taco!
  	$(document).on("click", '.taco', function() {
-    	console.log("Clicked a taco!");
+    	//console.log("Clicked a taco!");
     	if (confirm('You are about to delete a delicious taco! Delete it anyway?')) {
-    		deleteTaco($(this).attr('id')); //based on t(taco)id
+    		deleteTaco($(this).attr('id')); //based on tid
 		}
 	});
 
