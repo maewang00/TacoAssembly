@@ -9,6 +9,10 @@ body {
    font-family: Helvetica Neue;
 }
 
+h1, h2, h3, h4 {
+	cursor: default;
+}
+
 #header {
 	background: #A9A9A9;
 	text-align: center;
@@ -104,19 +108,33 @@ body {
 .item:hover {
 	cursor: pointer;
 	font-size: 10px;
-	transition-duration: 0.3s;
-	opacity: 0.9;	
+	transition-duration: 0.2s;
+	opacity: 0.5;	
+}
+
+.taco:hover {
+	cursor: pointer;
+	font-size: 10px;
+	transition-duration: 0.2s;
+	opacity: 0.5;	
+}
+
+.item-title {
+	background: #A4FCA0;
+	padding: 10px;
+	border-radius: 25px;
+	margin: 7px;
+}
+.taco-title {
+	background: #FCD8A0;
+	padding: 10px;
+	border-radius: 25px;
+	margin: 7px;
 }
 
 #results {
 	display: flex;
 	flex-direction: column;
-}
-
-#random-tacos {
-} 
-
-#user-made-tacos {
 }
 
 #ingredients-inner {

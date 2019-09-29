@@ -10,23 +10,24 @@ var currItemsList = {
 
 //Variable that update modes in JQuery.
 var randomMode = true;
+//Variable to make ids for made tacos.
 var idCount = 0;
 
-//tacoID to taco object dictionary
-var tacoIdDict = {};
-
+//When submit button is clicked, add taco!
 window.onload = function() {
 	document.getElementById("submit-button").onclick = function() {
-		if (randomMode) {
-			checkValidTaco();
-			addUserTaco();
-			clearItemsList();
+		if (!randomMode) {
+			if (checkValidTaco()) {
+				addUserTaco();
+				clearItemsList();	
+			}
 		} else {
 			addRandomTaco();
 		}
 	}
-}
+};
 
+//Clears ingredient list after making a taco.
 function clearItemsList() {
 	currItemsList = {
 		shells: [],
@@ -35,8 +36,12 @@ function clearItemsList() {
 		condiments: [],
 		seasonings: []
 	}
-}
 
+	var elements = document.getElementsByClassName("item");
+	for(var i = 0; i < elements.length; i++){
+		elements[i].style.backgroundColor = "#A4FCA0";
+	}
+};
 
 function addRandomTaco() {
 	var randList = {
@@ -46,49 +51,116 @@ function addRandomTaco() {
 		condiments: [],
 		seasonings: []
 	};
-	var newTaco = makeTaco(randList, randomMode);
+	var newTaco = makeTaco(randList, "random-tacos");
 	tacoIdDict[newTaco[id]] = newTaco;
-}
+};
 
+//Assuming that the criteria of taco is fulfilled. Add to tacoIdDict
 function addUserTaco() {
-	makeTaco(currItemsList, randomMode);
-}
-
+	makeTaco(currItemsList, "user-made-tacos");
+};
 
 //generic taco maker
-function makeTaco(itemsList, isRandomMode) {
+function makeTaco(itemsList, category) {
 	idCounter = idCount;
 	const taco = {
-		id: idCount.toString(),
-		shells: getArrItems(itemsList[shells]),
-		baseLayers: getArrItems(itemsList[baseLayers]),
-		mixins: getArrItems(itemsList[mixins]),
-		condiments: getArrItems(itemsList[condiments]),
-		seasonings: getArrItems(itemsList[seasonings])
+		tid: idCount, //.toString()
+		shells: stringify(itemsList["shells"]),
+		baseLayers: stringify(itemsList["baseLayers"]),
+		mixins: stringify(itemsList["mixins"]),
+		condiments: stringify(itemsList["condiments"]),
+		seasonings: stringify(itemsList["seasonings"])
 	};
+
+	var lst = document.getElementById(category);
+	var container = document.createElement("li");
+	container.setAttribute("id", getTacoID(taco)); //item.slug + index
+	container.setAttribute("class", "taco");;
+	var itemName = document.createTextNode(getTacoSentence(taco));
+	var br = document.createElement("br");
+		
+	container.appendChild(itemName);
+	lst.appendChild(container);
+	container.style.cssText = 'font-size: 70%; font-weight: bold; margin: 10px; text-align: left;';
+
 	idCount += 1;
 	return taco;
 };
 
-function checkValidTaco(itemsList) {
-	for(var key in Object.keys(dict)){
- 		var value = dict[key];
- 	}
+function getTacoSentence(taco) {
+	return "A taco consisting of: " + taco.shells + taco.baseLayers + taco.mixins + taco.condiments + taco.seasonings;
 };
 
-function getArrItems(){
-
+function stringify(arrOfIng) {
+	if (arraysEqual(arrOfIng, currItemsList["seasonings"])) {
+		console.log("Ye im the same");
+		var builder = "";
+		var arrayLength = arrOfIng.length;
+		for (var i = 0; i < arrayLength - 1; i++) {
+			builder += currItemsList["seasonings"][i] + ", ";
+		}
+		builder += "and " + currItemsList["seasonings"][arrayLength - 1] + ".";
+	} else {
+		var builder = "";
+		arrOfIng.forEach(function (item) {
+			builder += item + ", ";
+		});
+	}	
+	return builder;
 };
 
+function checkValidTaco() {
+	for (key in currItemsList) {
+		if (currItemsList[key].length == 0) {
+ 			alert("Oops! Looks like you're missing certain important parts of a complete taco! Please add at least one of each of the ingredients!");
+ 			return false;
+ 		}
+	}
+	return true;
+};
+
+function deleteTaco(tid) {
+	document.getElementById(tid).remove();
+}
 
 function getTacoID(taco){
   // some unique taco key
-  return taco[id];
+  return taco.tid;
 };
 
 //tacoIdDict[key(obj1)] = obj1;
 //tacoIdDict[key(obj2)] = obj2;
 var categories = ["shells", "baseLayers", "mixins", "condiments", "seasonings"];
+
+function removeIngredient(sect, ingName) {
+	var partsArray = sect.split(' ');
+	var section = partsArray[1];
+	var index = currItemsList[section].indexOf(ingName);
+	if (index > -1) {
+  		currItemsList[section].splice(index, 1);
+	}
+};
+
+function addIngredient(sect, ingName) {
+	var partsArray = sect.split(' ');
+	var section = partsArray[1];
+	currItemsList[section].push(ingName);
+};
+
+function arraysEqual(a, b) {
+  // if (a === b) return true;
+  // if (a == null || b == null) return false;
+  // if (a.length != b.length) return false;
+  console.log(a.length);
+  console.log(b.length);
+  console.log(b.length == a.length);
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
+
 
 categories.forEach(function (item, index) {
   getJSONfile('https://ct-tacoapi.azurewebsites.net/' + item, function(err, data) {
@@ -113,14 +185,14 @@ function getJSONfile(url, callback, category) {
 				//loop through the array of dictionaries
 				var lst = document.getElementById(category);
 				var container = document.createElement("li");
-				container.setAttribute("class", "item"); //item.slug + index
+				container.setAttribute("class", "item " + category); //item.slug + index
 				container.setAttribute("id", item.name);
 				var itemName = document.createTextNode(item.name);
 				var br = document.createElement("br");
  				
     			container.appendChild(itemName);
     			lst.appendChild(container);
-				container.style.cssText = 'font-size: 70%; font-weight: bold; margin: 5px;';
+				container.style.cssText = 'font-size: 70%; font-weight: bold; padding: 5px;';
 	 		});
 		} else {
 			console.log('error');
@@ -128,36 +200,6 @@ function getJSONfile(url, callback, category) {
 	}
 	request.send()
 };
-
-	// console.log('GETTING JSON FILES');
- //    var request = new XMLHttpRequest();
- //    request.open('GET', url, true);
- //    request.responseType = 'json';
- //    request.onload = function() {
- //    	var data = JSON.parse(this.response);
- //    	data.forEach(function (item, index) {
- //  				console.log(item, index);
-	// 		});
- //    	if (request.status >= 200 && request.status < 400) {
-    		
-
- //    		// data.forEach(movie => {
- //    		// 	console.log(movie.title)
- //    		// })
- //    	} else {
- //    		console.log('error');
- //    	}
-
-	    // var status = request.status;
-	    // if (status === 200) {
-	    // 	callback(null, request.response);
-	    // } else {
-	    // 	callback(status, request.response);
-	    // }
-    //};
-    //request.send();
-
-
 
 
 //JQuery basic animation functionality for the action buttons.
@@ -174,9 +216,21 @@ $(document).ready(function() {
     	console.log("Clicked an item!");
     	if ($(this).css('background-color') == 'rgb(255, 155, 0)') {
             $(this).css('background-color', 'white');
+            console.log("Adding " + $(this).attr('id'));
+            removeIngredient($(this).attr('class'), $(this).attr('id'));
         } else {
     		$(this).css("background-color", 'rgb(255, 155, 0)');
+    		addIngredient($(this).attr('class'), $(this).attr('id'));
     	}
+    	console.log(currItemsList);
+	});
+
+	//Clicking on generated taco!
+ 	$(document).on("click", '.taco', function() {
+    	console.log("Clicked a taco!");
+    	if (confirm('You are about to delete a delicious taco! Delete it anyway?')) {
+    		deleteTaco($(this).attr('id')); //based on t(taco)id
+		}
 	});
 
  	// Random Mode ON
