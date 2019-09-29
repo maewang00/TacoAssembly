@@ -122,7 +122,7 @@ function stringify(arrOfIng) {
 	if (arraysEqual(arrOfIng, currItemsList["seasonings"]) || arraysEqual(arrOfIng, generatedList["seasonings"])) {
 		var builder = "";
 		for (var i = 0; i < arrayLength - 1; i++) {
-			builder += arrOfIng["seasonings"][i] + ", ";
+			builder += arrOfIng[i] + ", ";
 		}
 		builder += "and " + arrOfIng[arrayLength - 1] + ".";
 	} else {
