@@ -88,16 +88,20 @@ function getTacoID(taco){
 
 //tacoIdDict[key(obj1)] = obj1;
 //tacoIdDict[key(obj2)] = obj2;
-getJSONfile('https://ct-tacoapi.azurewebsites.net/shells', function(err, data) {
+var categories = ["shells", "baseLayers", "mixins", "condiments", "seasonings"];
+
+categories.forEach(function (item, index) {
+  getJSONfile('https://ct-tacoapi.azurewebsites.net/' + item, function(err, data) {
   if (err !== null) {
     alert('Something went wrong: ' + err);
   } else {
     alert('Your query count: ' + data.query.count);
   }
+}, item);
 });
 
 //function to manage JSON url requests
-function getJSONfile(url, callback) {
+function getJSONfile(url, callback, category) {
 	var request = new XMLHttpRequest()
 	request.open('GET', url, true);
 	request.onload = function() {
@@ -106,6 +110,15 @@ function getJSONfile(url, callback) {
 		if (request.status >= 200 && request.status < 400) {
 			data.forEach(function (item, index) {
 				console.log(item, index);
+				//loop through the array of dictionaries
+				var lst = document.getElementById(category);
+				var container = document.createElement("li");
+				var itemName = document.createTextNode(item.name);
+				var br = document.createElement("br");
+ 				
+    			container.appendChild(itemName);
+    			lst.appendChild(container);
+				container.style.cssText = 'font-size: 70%; font-weight: bold; margin: 5px;';
 	 		});
 		} else {
 			console.log('error');
@@ -132,7 +145,7 @@ function getJSONfile(url, callback) {
  //    	} else {
  //    		console.log('error');
  //    	}
- 
+
 	    // var status = request.status;
 	    // if (status === 200) {
 	    // 	callback(null, request.response);
