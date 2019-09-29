@@ -13,6 +13,9 @@ var randomMode = true;
 //Variable to make ids for made tacos.
 var idCount = 0;
 
+//categories for ingredients
+var categories = ["shells", "baseLayers", "mixins", "condiments", "seasonings"];
+
 //When submit button is clicked, add taco!
 window.onload = function() {
 	document.getElementById("submit-button").onclick = function() {
@@ -128,10 +131,6 @@ function getTacoID(taco){
   return taco.tid;
 };
 
-//tacoIdDict[key(obj1)] = obj1;
-//tacoIdDict[key(obj2)] = obj2;
-var categories = ["shells", "baseLayers", "mixins", "condiments", "seasonings"];
-
 function removeIngredient(sect, ingName) {
 	var partsArray = sect.split(' ');
 	var section = partsArray[1];
@@ -215,7 +214,7 @@ $(document).ready(function() {
  	$(document).on("click", '.item', function() {
     	console.log("Clicked an item!");
     	if ($(this).css('background-color') == 'rgb(255, 155, 0)') {
-            $(this).css('background-color', 'white');
+            $(this).css('background-color', '#A4FCA0');
             console.log("Adding " + $(this).attr('id'));
             removeIngredient($(this).attr('class'), $(this).attr('id'));
         } else {
