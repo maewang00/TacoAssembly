@@ -1,0 +1,125 @@
+body {
+   margin: 0;
+   padding: 0;
+   border: 0;
+   outline: 0;
+   font-size: 100%;
+   vertical-align: baseline;
+   background: #222222;
+   font-family: Helvetica Neue;
+}
+
+#header {
+	background: #A9A9A9;
+	text-align: center;
+	font-size: 16px;
+  	padding: 5px;
+  	margin-left: 50px;
+  	margin-right: 50px;
+  	border-radius: 25px;
+  	box-shadow: 5px 10px black;
+}
+
+#title {
+	margin-bottom: -10px;
+}
+
+#description {
+	line-height: 1.5;
+}
+
+.button {
+	margin: 30px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+#button1 {
+	background: #FCD8A0;
+	padding: 10px;
+	border-radius: 25px;
+	box-shadow: 5px 10px black;
+	margin: 7px;
+	opacity: 0.6;
+}
+
+#button2 {
+	background: #A4FCA0;
+	padding: 10px;
+	border-radius: 25px;
+	box-shadow: 5px 10px black;
+	margin: 7px;
+	opacity: 0.6;
+}
+
+#submit-button {
+	margin: 30px;
+	background: #F07777;
+	padding: 3px;
+	border-radius: 25px;
+	text-align: center;
+	box-shadow: 5px 10px black;
+	opacity: 0.6;
+	line-height: 0.7;
+}
+
+#button1:hover {
+	cursor: pointer;
+	font-size: 20px;
+	transition-duration: 0.3s;
+	opacity: 0.9;
+}
+
+#button2:hover {
+	cursor: pointer;
+	font-size: 20px;
+	transition-duration: 0.3s;
+	opacity: 0.9;
+}
+
+#submit-button:hover {
+	cursor: pointer;
+	font-size: 20px;
+	transition-duration: 0.3s;
+	opacity: 0.9;	
+}
+
+#make-result-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+#activity-container-left {
+	text-align: center;
+	background: #FFFFFF;
+	width: 50%;
+	height: 100%;
+	padding: 10px;
+	border-radius: 25px;
+	box-shadow: 5px 10px black;
+	margin: 7px;
+}
+
+#activity-container-right {
+	text-align: center;
+	background: #FFFFFF;
+	width: 50%;
+	height: 100%;
+	padding: 10px;
+	border-radius: 25px;
+	box-shadow: 5px 10px black;
+	margin: 7px;
+}
+
+#results {
+	display: flex;
+	flex-direction: column;
+}
+
+#random-tacos {
+} 
+
+#user-made-tacos {
+}

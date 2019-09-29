@@ -1,0 +1,105 @@
+<html>
+	<head>
+		<title>Taco Assembly</title>
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="assets/js/script.js"></script>
+	</head>
+	<body>
+
+		<!-- Header -->
+		<div id = "header">
+			<!-- Title -->
+			<div id = "title">
+				<h2>Taco Assembly</h2>
+			</div>
+
+			<!-- Description of web application -->
+			<div id = "description">
+				<h4>Welcome to the Random Taco Assembler! 
+					<br>Click on 'Make Random' to see what unique tacos you can build. To build your very own unique tacos, enter 'Make My Own Taco' mode and go wild!
+				</h4>
+				<h3><i>Happy Taco-ing!</i></h3>
+			</div>
+		</div>
+
+
+		<!-- Swapper Buttons -->
+		<div class = "button">
+			<div id = "button1">
+				<h4>Make Random</h4>
+			</div>
+
+			<div id = "button2">
+				<h4>Make My Own</h4>
+			</div>
+		</div>
+
+		<!-- A button to submit for 'Make Your Own Taco' mode -->
+		<div id = "submit-button">
+			<h1>&#127790;</h1>
+			<h4>Generate Taco!</h4>
+		</div>
+
+		<!-- ClickTime API for list of ingredents categories and results -->
+		<div id = "make-result-container">
+			<!-- Output Displayer -->
+			<div class = activity-container id = "activity-container-left">
+				<div id = "results">
+					<div id = "random-tacos">
+						<h3><u>Randomly Generated Tacos</u></h3>
+					</div>
+
+					<div id = "user-made-tacos">
+						<h3><u>Your Tacos</u></h3>
+						<!-- <h3>&#10006;</h3> -->
+					</div>
+				</div>
+			</div>
+
+			<div class = activity-container id = "activity-container-right">
+			
+				<div id = "ingredients-outer">
+					<h2><u>Ingredients</u></h2>
+
+					<div id = "ingredients-inner">
+						<div id = "shell">
+							<h4><u>Shells</u></h4>
+						</div>
+
+						<div id = "base-layer">
+							<h4><u>Base Layers</u></h4>
+						</div>
+
+						<div id = "mixin">
+							<h4><u>Mixins</u></h4>
+						</div>
+
+						<div id = "condiment">
+							<h4><u>Condiments</u></h4>
+						</div>
+
+						<div id = "seasoning">
+							<h4><u>Seasonings</u></h4>
+						</div>
+					</div>
+				</div>
+
+				<!-- API goes here -->
+
+			</div>
+		</div>
+		
+
+		<!-- Error Message when submitting invalid taco
+			An informative message for what is missing!-->
+		<div id = "error-displayer">
+			<h2>Oops!</h2> <h4>Looks like you're missing certain important parts of a complete taco! <br>Please add <i>at least one</i> of each of the following ingredients: <br>* </h4>
+		</div>
+
+
+	</body>
+
+
+
+</html>
